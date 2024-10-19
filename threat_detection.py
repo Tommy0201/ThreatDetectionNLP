@@ -38,6 +38,7 @@ def threaten_detection(context, conversation):
         result = json.loads(response_body) 
         print(result)
         output = json.loads(result['content'][0]['text']) 
+        
     except Exception as e:
 
         print(f"Error occurred: {e}")
@@ -48,5 +49,5 @@ def threaten_detection(context, conversation):
 
 if __name__ == "__main__":
     context = ""
-    conversation = "how are you doing"
+    conversation = ""
     print(threaten_detection(context=context,conversation=conversation))

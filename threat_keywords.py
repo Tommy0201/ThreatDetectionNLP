@@ -5,8 +5,8 @@ import string
 from textblob import TextBlob
 import contractions
 
-# nltk.download('punkt')
-# nltk.download('wordnet')
+nltk.download('punkt')
+nltk.download('wordnet')
 
 
 threatening_keywords = [
@@ -31,5 +31,5 @@ def find_threatening_token(sentence):
                 return True
     return False
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # print(find_threatening_token("he is so creepy"))

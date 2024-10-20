@@ -7,8 +7,7 @@ from summarization import summary
 import json
 
 app = Flask(__name__)
-socketio = SocketIO(app)
-sio = socketio.Server(cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 
 
@@ -22,7 +21,6 @@ def hello_world():
 def delete_conversation():
     global conversation
     conversation = ""
-    context = ""  
     return jsonify({"conversation": conversation})
 
 @app.route('/history', methods=['POST'])
@@ -58,7 +56,21 @@ def detect_threat():
     out = {"answer": threaten, "threaten_type": threaten_type,  "conversation": conversation}
     
     print(out)
+    
+    # Send alert to frontend if threat is detected
+    if threaten == "yes":
+        socketio.emit('threat_alert', out, namespace='/threat')
+    
     return jsonify(out)
+
+
+@socketio.on('connect', namespace='/threat')
+def handle_connect():
+    print('Client connected to threat namespace')
+
+@socketio.on('disconnect', namespace='/threat')
+def handle_disconnect():
+    print('Client disconnected from threat namespace')
 
 if __name__ == '__main__':
     socketio.run(app,host='0.0.0.0', port=4900)

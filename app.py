@@ -1,11 +1,16 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+from flask_socketio import SocketIO, emit
+from flask_cors import CORS
 from threat_keywords import find_threatening_token
 from threat_detection import threaten_detection
 from summarization import summary
-from flask import Flask, request, jsonify
 import json
 
 app = Flask(__name__)
+socketio = SocketIO(app)
+sio = socketio.Server(cors_allowed_origins="*")
+CORS(app)
+
 
 conversation = ""
 
@@ -56,4 +61,4 @@ def detect_threat():
     return jsonify(out)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4900)
+    socketio.run(app,host='0.0.0.0', port=4900)

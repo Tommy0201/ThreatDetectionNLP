@@ -1,7 +1,7 @@
 import requests
 
 
-url = "http://54.188.20.167:5000/detect"
+url = "http://54.212.239.210:5000//detect"
 local_url = "http://127.0.0.1:4900/detect"
 data = "what is going on"
 

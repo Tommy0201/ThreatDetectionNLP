@@ -14,11 +14,11 @@ def threaten_detection(context, conversation):
         aws_session_token=os.getenv('AWS_SESSION_TOKEN')
     )
 
-    prompt = f"""You are given a conversation with two or more people involved: {conversation}. And the context: {context}. 
+    prompt = f"""You are given a part of the conversation with two or more people involved: {conversation}. And the context: {context}. 
     OUTPUT FORMAT. DO NOT SAY ANYTHING ELSE:
-    {{"summary": "", "threaten": ""}} 
-    For the 'summary' key, please summarize the conversation as well as the context. Keep it succinct. If there is no context then "summary": "".
-    For the 'threaten' key, please indicate "yes" or "no" based on the conversation and the context. If the conversation is irrelavent, indicate "no".
+    {{"threaten": "", "threat_type":""}} 
+    For the "threaten" key value, you can only return either "yes" or "no". "yes" means there is threat (sexual harrasment, threatenings, harmful/malicious intentions terrorist intention) in the conversation. "no" means there is no such threat.
+    For the "threat_type" key value, you must return "none" if there is no threat. Return the kind of threat using one or two words if there is threat(s).
     """
 
     kwargs = {
@@ -38,16 +38,11 @@ def threaten_detection(context, conversation):
         result = json.loads(response_body) 
         print(result)
         output = json.loads(result['content'][0]['text']) 
-        
     except Exception as e:
-
         print(f"Error occurred: {e}")
-        context = f"""Context before: {context}. Context after: {conversation}"""
-        return {"summary": f"{context}", "threaten": ""}  
-
+        return {"threat_type": "", "threaten": "no"}  
     return output
-
 if __name__ == "__main__":
-    context = ""
-    conversation = ""
+    context = "what is the matter"
+    conversation = "what is the matter"
     print(threaten_detection(context=context,conversation=conversation))
